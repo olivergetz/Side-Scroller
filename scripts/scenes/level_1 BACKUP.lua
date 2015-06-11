@@ -1,5 +1,4 @@
-display.setStatusBar(display.HiddenStatusBar)
-
+-- LEVEL 1
 local physics = require "physics"
 physics.start()
 physics.setGravity( -7, 0 )
@@ -12,16 +11,22 @@ background.anchorX = 0
 background.anchorY = 0
 background.x = 0
 background.y = 0
+background.height = display.contentHeight
+background.width = display.contentWidth
 
 local player = display.newImage("images/player.png")
-player.x = 300
-player.y = 640
+player.x = display.contentHeight / 2
+player.y = display.contentWidth / 3
 physics.addBody(player, "dynamic", {density = 1, bounce = 0})
 player.canJump = 0
 
 local userInterface = display.newImage("images/UI.png")
 userInterface.anchorX = 0
 userInterface.anchorY = 0
+userInterface.x = 0
+userInterface.y = 0
+userInterface.height = display.contentHeight
+userInterface.width = display.contentWidth / 3.5
 
 local screenLeftPressed = false
 local screenRightPressed = false
@@ -31,91 +36,115 @@ local attackButtonPressed = false
 ground = display.newImage( "images/ground.png", 240, 240)
 ground.anchorX = 0
 ground.anchorY = 0
-ground.x = 260
+ground.x = display.contentWidth / 3
 ground.y = 0
 physics.addBody(ground, "static", {density = 1, bounce = 0})
 
-moveLeftButton = display.newImage( "images/ButtonLeft.png", 240, 240)
+moveLeftButton = display.newImage( "images/ButtonLeft.png")
 moveLeftButton.anchorX = 0
 moveLeftButton.anchorY = 0
 moveLeftButton.x = 0
 moveLeftButton.y = 0
+moveLeftButton.width = display.contentWidth / 3.5
+moveLeftButton.height = moveLeftButton.width
 
-moveRightButton = display.newImageRect( "images/ButtonRight.png", 240, 240)
+moveRightButton = display.newImage( "images/ButtonRight.png")
 moveRightButton.anchorX = 0
 moveRightButton.anchorY = 0
 moveRightButton.x = 0
-moveRightButton.y = 240
+moveRightButton.y = moveLeftButton.height
+moveRightButton.width = display.contentWidth / 3.5
+moveRightButton.height = moveRightButton.width
 
-jumpButton = display.newImageRect( "images/jumpButton.png", 240, 240)
+jumpButton = display.newImage( "images/jumpButton.png")
 jumpButton.anchorX = 0
 jumpButton.anchorY = 0
 jumpButton.x = 0
-jumpButton.y = 1040
+jumpButton.y = display.contentHeight - (display.contentWidth / 3.5)
+jumpButton.width = display.contentWidth / 3.5
+jumpButton.height = jumpButton.width
 
-attackButton = display.newImageRect( "images/attackButton.png", 240, 240)
+attackButton = display.newImage( "images/attackButton.png")
 attackButton.anchorX = 0
 attackButton.anchorY = 0
 attackButton.x = 0
-attackButton.y = 800
+attackButton.y = display.contentHeight - (jumpButton.height * 2)
+attackButton.width = display.contentWidth / 3.5
+attackButton.height = attackButton.width
 
 -- buttons animation function
 
 function buttonGraphics(event)
 	if screenLeftPressed == false then
-		moveLeftButton = display.newImage( "images/ButtonLeft.png", 240, 240)
+		moveLeftButton = display.newImage( "images/ButtonLeft.png")
 		moveLeftButton.anchorX = 0
 		moveLeftButton.anchorY = 0
 		moveLeftButton.x = 0
 		moveLeftButton.y = 0
+		moveLeftButton.width = display.contentWidth / 3.5
+		moveLeftButton.height = moveLeftButton.width
 	else
-		moveLeftButton = display.newImage( "images/ButtonLeftPushed.png", 240, 240)
+		moveLeftButton = display.newImage( "images/ButtonLeftPushed.png")
 		moveLeftButton.anchorX = 0
 		moveLeftButton.anchorY = 0
 		moveLeftButton.x = 0
 		moveLeftButton.y = 0
+		moveLeftButton.width = display.contentWidth / 3.5
+		moveLeftButton.height = moveLeftButton.width
 	end
 
 	if screenRightPressed == false then
-		moveRightButton = display.newImageRect( "images/ButtonRight.png", 240, 240)
+		moveRightButton = display.newImage( "images/ButtonRight.png")
 		moveRightButton.anchorX = 0
 		moveRightButton.anchorY = 0
 		moveRightButton.x = 0
-		moveRightButton.y = 240
+		moveRightButton.y = moveLeftButton.height
+		moveRightButton.width = display.contentWidth / 3.5
+		moveRightButton.height = moveRightButton.width
 	else
-		moveRightButton = display.newImageRect( "images/ButtonRightPushed.png", 240, 240)
+		moveRightButton = display.newImage( "images/ButtonRightPushed.png")
 		moveRightButton.anchorX = 0
 		moveRightButton.anchorY = 0
 		moveRightButton.x = 0
-		moveRightButton.y = 240
+		moveRightButton.y = moveLeftButton.height
+		moveRightButton.width = display.contentWidth / 3.5
+		moveRightButton.height = moveRightButton.width
 	end
 
 	if attackButtonPressed == false then
-		attackButton = display.newImageRect( "images/attackButton.png", 240, 240)
+		attackButton = display.newImage( "images/attackButton.png")
 		attackButton.anchorX = 0
 		attackButton.anchorY = 0
 		attackButton.x = 0
-		attackButton.y = 800
+		attackButton.y = display.contentHeight - (jumpButton.height * 2)
+		attackButton.width = display.contentWidth / 3.5
+		attackButton.height = attackButton.width
 	else
-		attackButton = display.newImageRect( "images/attackButtonPushed.png", 240, 240)
+		attackButton = display.newImage( "images/attackButtonPushed.png")
 		attackButton.anchorX = 0
 		attackButton.anchorY = 0
 		attackButton.x = 0
-		attackButton.y = 800
+		attackButton.y = display.contentHeight - (jumpButton.height * 2)
+		attackButton.width = display.contentWidth / 3.5
+		attackButton.height = attackButton.width
 	end
 
 	if jumpButtonPressed == false then
-		jumpButton = display.newImageRect( "images/jumpButton.png", 240, 240)
+		jumpButton = display.newImage( "images/jumpButton.png")
 		jumpButton.anchorX = 0
 		jumpButton.anchorY = 0
 		jumpButton.x = 0
-		jumpButton.y = 1040
+		jumpButton.y = display.contentHeight - (display.contentWidth / 3.5)
+		jumpButton.width = display.contentWidth / 3.5
+		jumpButton.height = jumpButton.width
 	else
-		jumpButton = display.newImageRect( "images/jumpButtonPushed.png", 240, 240)
+		jumpButton = display.newImage( "images/jumpButtonPushed.png")
 		jumpButton.anchorX = 0
 		jumpButton.anchorY = 0
 		jumpButton.x = 0
-		jumpButton.y = 1040
+		jumpButton.y = display.contentHeight - (display.contentWidth / 3.5)
+		jumpButton.width = display.contentWidth / 3.5
+		jumpButton.height = jumpButton.width
 	end
 
 end
