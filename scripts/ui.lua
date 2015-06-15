@@ -1,4 +1,5 @@
 -- User Interface
+local globalData = require ( "globalData" )
 
 leftButtonPressed = false
 rightButtonPressed = false
@@ -29,6 +30,10 @@ function activateUI( event )
 	jumpButton:addEventListener( "touch", touchButtonJump )
 
 	attackButton:addEventListener( "touch", touchButtonAttack )
+
+	globalData.backgroundMostRight = true
+
+	globalData.backgroundMostLeft = false
 
 end
 
@@ -115,12 +120,13 @@ function touchButtonLeft( event )
 	if event.phase == "began" then
 		leftButtonPressed = true
 		buttonGraphics()
+		globalData.leftButtonPressed = true
 	elseif event.phase == "moved" then
-		leftButtonPressed = false
-		buttonGraphics()
+
 	elseif event.phase == "ended" then
 		leftButtonPressed = false
 		buttonGraphics()
+		globalData.leftButtonPressed = false
 	end
 
 end
@@ -129,12 +135,13 @@ function touchButtonRight( event )
 	if event.phase == "began" then
 		rightButtonPressed = true
 		buttonGraphics()
+		globalData.rightButtonPressed = true
 	elseif event.phase == "moved" then
-		rightButtonPressed = false
-		buttonGraphics()
+
 	elseif event.phase == "ended" then
 		rightButtonPressed = false
 		buttonGraphics()
+		globalData.rightButtonPressed = false
 	end
 
 end

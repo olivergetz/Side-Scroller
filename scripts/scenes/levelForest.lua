@@ -1,0 +1,104 @@
+local ui = require( "scripts.ui" )
+local player = require( "scripts.player" )
+local storyboard = require( "storyboard" )
+local physics = require ( "physics" )
+local globalData = require( "globalData" )
+
+physics.start()
+physics.setGravity( -7, 0 )
+
+local levelForest = storyboard.newScene()
+local playerPosition = globalData.playerPosition
+globalData.backgroundSpeed = 0
+globalData.backgroundMostRight = true
+globalData.backgroundMostLeft = false
+
+function levelForest:createScene( event )
+
+	background = display.newImage("images/backgroundForest.png")
+	background.anchorX = 0
+	background.anchorY = 0
+	background.x = 0
+	background.y = 0
+	background.height = display.contentHeight * 4
+	background.width = display.contentWidth
+	globalData.backgroundMostRight = true
+	globalData.backgroundMostLeft = false
+
+	player.activatePlayer()
+	ui.activateUI()
+
+	ground = display.newImage( "images/ground.png", 240, 240)
+	ground.anchorX = 0
+	ground.anchorY = 0
+	ground.x = display.contentWidth / 3
+	ground.y = 0
+	ground.height = display.contentWidth * 2
+	physics.addBody(ground, "static", {density = 1, bounce = 0})
+
+end
+
+-- Move background based on player position
+
+function backgroundScroll( event )
+
+	-- Move Background Right
+
+	if globalData.backgroundMostRight == true then
+
+		-- Do Nothing
+
+	elseif globalData.backgroundMostLeft == true then
+
+		-- Do Nothing
+
+	elseif globalData.backgroundMostRight == false and globalData.rightButtonPressed == true then
+
+			background.y = background.y - 10
+			globalData.backgroundPosition = background.y
+
+			if background.y <= 0 - (display.contentHeight * 3) then
+
+				globalData.backgroundMostLeft = true
+
+				print("is left most")
+
+			end
+
+	elseif globalData.backgroundMostRight == false and globalData.leftButtonPressed == true then
+
+			background.y = background.y + 10
+			globalData.backgroundPosition = background.y
+
+			if background.y == 0 then
+
+				globalData.backgroundMostRight = true
+
+			end
+
+	end
+
+end
+
+Runtime:addEventListener( "enterFrame", backgroundScroll )
+
+function levelForest:enterScene( event )
+
+end
+
+function levelForest:exitScene( event )
+
+end
+
+-- Clean Up
+
+function levelForest:destroyScene( event )
+
+end
+
+levelForest:addEventListener( "createScene", levelForest )
+levelForest:addEventListener( "enterScene", levelForest )
+levelForest:addEventListener( "exitScene", levelForest )
+levelForest:addEventListener( "destroyScene", levelForest )
+
+return levelForest

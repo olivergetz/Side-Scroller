@@ -1,4 +1,5 @@
 local storyboard = require( "storyboard" )
+local globalData = require( "globalData" )
 local scene = storyboard.newScene()
 
 local function buttonHit( event )
@@ -24,7 +25,7 @@ function scene:createScene( event )
 	playbtn.x = title.x - (display.contentWidth / 5)
 	playbtn.y = display.contentHeight / 2
 	playbtn:rotate( 90 )
-	playbtn.goto = "scripts.scenes.level_1"
+	playbtn.goto = "scripts.scenes.levelForest"
 	playbtn:addEventListener("tap", buttonHit)
 	group:insert(playbtn)
 
