@@ -4,6 +4,8 @@ local scene = storyboard.newScene()
 
 local function buttonHit( event )
 
+	local exitbtn = nil
+
 	storyboard.gotoScene(event.target.goto, { effect="slideRight" })
 
 	return true
@@ -13,7 +15,7 @@ end
 function scene:createScene( event )
 	local group = self.view
 
-	local title = display.newText("Side-Scroller", 0, 0, "Helvetica", 128)
+	local title = display.newText("Sword of Destiny", 0, 0, "Helvetica", 128)
 
 	title.x = 2 * (display.contentWidth / 3)
 	title.y = display.contentHeight / 2
@@ -38,6 +40,20 @@ function scene:createScene( event )
 	optionsbtn:addEventListener("tap", buttonHit)
 	group:insert(optionsbtn)
 
+	local exitbtn = display.newText("Quit Game", 0, 0, "Helvetica", 72)
+
+	exitbtn.x = optionsbtn.x - (display.contentWidth / 10)
+	exitbtn.y = display.contentHeight / 2
+	exitbtn:rotate( 90 )
+	exitbtn:addEventListener("tap", tapQuit)
+	group:insert(exitbtn)
+
+end
+
+function tapQuit( event )
+
+	os.exit()
+
 end
 
 function scene:enterScene( event )
@@ -49,6 +65,8 @@ function scene:exitScene( event )
 end
 
 function scene:destroyScene( event )
+
+
 
 end
 

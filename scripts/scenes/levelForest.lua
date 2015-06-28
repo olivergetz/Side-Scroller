@@ -1,17 +1,22 @@
+-- LEVEL 1 - FOREST LEVEL
+
 local ui = require( "scripts.ui" )
 local player = require( "scripts.player" )
+local enemies = require( "scripts.enemies" )
 local storyboard = require( "storyboard" )
 local physics = require ( "physics" )
 local globalData = require( "globalData" )
 
 physics.start()
-physics.setGravity( -7, 0 )
+physics.setGravity( -10, 0 )
 
-local levelForest = storyboard.newScene()
-local playerPosition = globalData.playerPosition
-globalData.backgroundSpeed = 0
+globalData.playerPosition = 50
+globalData.backgroundSpeed = 10 -- Should be the same as player speed.
 globalData.backgroundMostRight = true
 globalData.backgroundMostLeft = false
+
+local levelForest = storyboard.newScene()
+spawnTable = {}
 
 function levelForest:createScene( event )
 
@@ -24,6 +29,9 @@ function levelForest:createScene( event )
 	background.width = display.contentWidth
 	globalData.backgroundMostRight = true
 	globalData.backgroundMostLeft = false
+	staticObjects:insert(background)
+
+	globalData.playerInArena = false
 
 	player.activatePlayer()
 	ui.activateUI()
@@ -35,6 +43,9 @@ function levelForest:createScene( event )
 	ground.y = 0
 	ground.height = display.contentWidth * 2
 	physics.addBody(ground, "static", {density = 1, bounce = 0})
+	staticObjects:insert(ground)
+
+	spawnEnemy("images/bandit.png", spawnTable, 50, 150, display.contentWidth / 2, display.contentHeight / 1.5)
 
 end
 
@@ -54,25 +65,49 @@ function backgroundScroll( event )
 
 	elseif globalData.backgroundMostRight == false and globalData.rightButtonPressed == true then
 
-			background.y = background.y - 10
-			globalData.backgroundPosition = background.y
+			staticObjects.y = staticObjects.y - globalData.backgroundSpeed
+			globalData.backgroundPosition = staticObjects.y
 
-			if background.y <= 0 - (display.contentHeight * 3) then
+			if staticObjects.y <= 0 - (display.contentHeight * 3) then
 
 				globalData.backgroundMostLeft = true
 
-				print("is left most")
+			end
+
+			for key, value in pairs(spawnTable) do -- move enemies left
+
+				value.y = value.y - globalData.backgroundSpeed
+				globalData.backgroundPosition = value.y
+
+				if value.y <= 0 - (display.contentHeight * 3) then
+
+					globalData.backgroundMostLeft = true
+
+				end
 
 			end
 
 	elseif globalData.backgroundMostRight == false and globalData.leftButtonPressed == true then
 
-			background.y = background.y + 10
-			globalData.backgroundPosition = background.y
+			staticObjects.y = staticObjects.y + globalData.backgroundSpeed
+			globalData.backgroundPosition = staticObjects.y
 
-			if background.y == 0 then
+			if staticObjects.y == 0 then
 
 				globalData.backgroundMostRight = true
+
+			end
+
+			for key, value in pairs(spawnTable) do -- move enemies right
+
+			value.y = value.y + globalData.backgroundSpeed
+			globalData.backgroundPosition = value.y
+
+				if value.y == 0 then
+
+					globalData.backgroundMostRight = true
+
+				end
 
 			end
 

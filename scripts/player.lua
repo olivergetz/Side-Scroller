@@ -2,21 +2,29 @@ local physics = require( "physics" )
 local ui = require( "scripts.ui" )
 local globalData = require( "globalData" )
 
-player = display.newImage("images/player.png")
-player.x = display.contentHeight / 2
-player.y = display.contentWidth / 3
-
 function activatePlayer( event )
 
 	player = display.newImage("images/player.png")
 	player.x = display.contentHeight / 2
 	player.y = display.contentWidth / 3
+
+	if globalData.playerInArena == false then -- size of player if not in an arena
+		player.height = 25
+		player.width = 25
+	elseif globalData.playerInArena == true then -- size of player if in an arena
+		player.height = 50
+		player.width = 50
+	end
+
 	physics.addBody(player, "dynamic", {density = 1, bounce = 0})
-	player.canJump = 0
+	playerGraphicsLayer:insert(player)
+
+	player:addEventListener( "collision", player )
 
 	globalData.playerPosition = player.y
 	globalData.rightButtonPressed = rightButtonPressed
 	globalData.leftButtonPressed = leftButtonPressed
+	globalData.canJump = true
 
 end
 
@@ -85,16 +93,20 @@ function movePlayer( event )
 
 end
 
-
-
 Runtime:addEventListener( "enterFrame", movePlayer )
 
 function jumpPlayer( event )
-	if jumpButtonPressed == true then
-		player.x = player.x + 10
-	else
+
+	if jumpButtonPressed == true and globalData.canJump == true then
+
+		player:applyLinearImpulse( 8, 0, player.x, player.y )
+
+		globalData.canJump = false
+
+		timer.performWithDelay( 3000, jumpTimer)
 
 	end
+
 end
 
 Runtime:addEventListener( "enterFrame", jumpPlayer )
